@@ -9,5 +9,6 @@ public class Main {
 
 //        SwingUtilities.invokeLater(MainFrame::new);
 
+        System.out.println();
     }
 }
