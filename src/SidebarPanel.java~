@@ -1,0 +1,44 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class SidebarPanel extends JPanel {
+    public SidebarPanel() {
+        // Create the button
+        JButton homeButton = new JButton("Home");
+
+        // Base and hover colors
+        Color baseColor = new Color(240, 240, 240);
+        Color hoverColor = baseColor.brighter();
+
+        // Style the button
+        homeButton.setFocusPainted(false);
+        homeButton.setBorderPainted(false);
+        homeButton.setContentAreaFilled(true);
+        homeButton.setBackground(baseColor);
+        homeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        // Add hover effect
+        homeButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                homeButton.setBackground(hoverColor);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                homeButton.setBackground(baseColor);
+            }
+        });
+
+        // Optional: Click event
+        homeButton.addActionListener(e -> {
+            System.out.println("Home button clicked");
+        });
+
+        // Layout
+        setLayout(new GridLayout(5, 1));
+        setPreferredSize(new Dimension(150, 0));
+        add(homeButton);
+    }
+}

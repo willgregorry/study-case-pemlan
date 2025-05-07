@@ -1,0 +1,13 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class HeaderPanel extends JPanel {
+    public HeaderPanel() {
+        setBackground(Color.DARK_GRAY);
+        setPreferredSize(new Dimension(800, 50));
+        JLabel title = new JLabel("Dashboard");
+        title.setFont(title.getFont().deriveFont(Font.BOLD, 50));
+        title.setForeground(Color.WHITE);
+        add(title);
+    }
+}

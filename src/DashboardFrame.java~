@@ -1,0 +1,19 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class DashboardFrame extends JFrame {
+    public DashboardFrame() {
+        setTitle("Dashboard");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(800, 600);
+        setLocationRelativeTo(null);
+
+        setLayout(new BorderLayout());
+
+        add(new HeaderPanel(), BorderLayout.NORTH);
+        add(new SidebarPanel(), BorderLayout.WEST);
+//        add(new MainContentPanel(), BorderLayout.CENTER);
+
+        setVisible(true);
+    }
+}
