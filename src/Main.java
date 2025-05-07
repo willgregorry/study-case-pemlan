@@ -10,5 +10,6 @@ public class Main {
 //        SwingUtilities.invokeLater(MainFrame::new);
 
         System.out.println();
+        System.out.println("Fayas test pull");
     }
 }
