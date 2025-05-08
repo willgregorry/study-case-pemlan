@@ -20,7 +20,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color(0xFEF3E2));
+        getContentPane().setBackground(new Color(0xFEB362));
 
         // Set the layout of the application
         setLayout(null);

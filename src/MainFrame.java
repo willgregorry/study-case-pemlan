@@ -5,8 +5,8 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         // Environments
         final Image ICON = new ImageIcon("assets/icon.png").getImage();
-        final int SCREEN_WIDTH = 1920;
-        final int SCREEN_HEIGHT = 1080;
+        final int SCREEN_WIDTH = 800;
+        final int SCREEN_HEIGHT = 800;
 
         // Get image icon in "assets" folder, then set it as the icon
         setIconImage(ICON);
