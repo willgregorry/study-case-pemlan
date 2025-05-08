@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class BusSeatSelection extends JFrame {
 
@@ -144,7 +145,7 @@ public class BusSeatSelection extends JFrame {
 
         resetButton.addActionListener(e -> {
             for (JButton seat : allSeats) {
-                seat.setBackground(Color.GREEN);
+                seat.setBackground(Color.WHITE);
             }
         });
 
@@ -154,12 +155,12 @@ public class BusSeatSelection extends JFrame {
     private JButton createSeat(String label, Dimension size) {
         JButton seatButton = new JButton(label);
         seatButton.setPreferredSize(size);
-        seatButton.setBackground(Color.GREEN);
+        seatButton.setBackground(Color.WHITE);
         seatButton.addActionListener(e -> {
-            if (seatButton.getBackground() == Color.GREEN) {
-                seatButton.setBackground(Color.RED);
-            } else if (seatButton.getBackground() == Color.RED) {
-                seatButton.setBackground(Color.GREEN);
+            if (seatButton.getBackground() == Color.WHITE) {
+                seatButton.setBackground(new Color(0x285FF4));
+            } else if (Objects.equals(seatButton.getBackground(), new Color(0x285FF4))) {
+                seatButton.setBackground(Color.WHITE);
             }
         });
         allSeats.add(seatButton);
