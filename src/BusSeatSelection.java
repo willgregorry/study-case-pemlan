@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.*;
 import java.util.List;
 
@@ -15,6 +14,11 @@ public class BusSeatSelection extends JFrame {
     private JButton backButton, nextButton, resetButton;
     private boolean isFillingForm = false;
 
+    private final Color darkBlue = new Color(0x27548A);
+    private final Color seatPanelColor = new Color(0x7AE2CF); // Warna kursi diubah menjadi 7AE2CF
+    private final Color beige = new Color(0xECDFBA);  // Warna beige yang diinginkan untuk panel
+
+
     public BusSeatSelection() {
         setTitle("Pilih Kursi Bus");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -23,11 +27,13 @@ public class BusSeatSelection extends JFrame {
         setResizable(false);
 
         mainPanel = new JPanel(null);
+        mainPanel.setBackground(Color.WHITE); // Mengubah warna main panel menjadi putih
         setContentPane(mainPanel);
 
         backButton = new JButton("Kembali");
         backButton.setBounds(680, 10, 90, 25);
         backButton.setVisible(false);
+        styleButton(backButton);
         mainPanel.add(backButton);
         backButton.addActionListener(e -> {
             if (isFillingForm) {
@@ -35,7 +41,8 @@ public class BusSeatSelection extends JFrame {
                 selectedSeats.clear();
                 for (JButton seat : allSeats) {
                     if (seat.isEnabled()) {
-                        seat.setBackground(Color.WHITE);
+                        seat.setBackground(seatPanelColor);
+                        seat.setForeground(Color.BLACK);
                     }
                 }
                 backButton.setVisible(false);
@@ -46,12 +53,12 @@ public class BusSeatSelection extends JFrame {
         });
 
         JPanel seatPanel = new JPanel(new GridBagLayout());
+        seatPanel.setBackground(beige); // Panel kursi menggunakan warna beige
         JScrollPane seatScrollPane = new JScrollPane(seatPanel);
         seatScrollPane.setBounds(270, 50, 500, 620);
         mainPanel.add(seatScrollPane);
 
         GridBagConstraints gbc = new GridBagConstraints();
-
         gbc.insets = new Insets(0, 0, 40, 0);
         gbc.gridy = 0;
         gbc.gridx = 3;
@@ -115,6 +122,8 @@ public class BusSeatSelection extends JFrame {
         resetButton = new JButton("Reset");
         nextButton.setBounds(270, 680, 100, 30);
         resetButton.setBounds(380, 680, 100, 30);
+        styleButton(nextButton);
+        styleButton(resetButton);
         mainPanel.add(nextButton);
         mainPanel.add(resetButton);
 
@@ -130,10 +139,9 @@ public class BusSeatSelection extends JFrame {
 
         resetButton.addActionListener(e -> {
             for (JButton seat : allSeats) {
-                // Mengubah warna semua kursi kembali ke putih
-                seat.setBackground(Color.WHITE);
-                // Mengaktifkan kembali semua kursi yang mungkin sudah dipesan (disabled)
+                seat.setBackground(seatPanelColor);
                 seat.setEnabled(true);
+                seat.setForeground(Color.BLACK);
             }
             selectedSeats.clear();
             removePassengerPanel();
@@ -142,17 +150,25 @@ public class BusSeatSelection extends JFrame {
         setVisible(true);
     }
 
+    private void styleButton(JButton button) {
+        button.setBackground(darkBlue);
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+    }
+
     private JButton createSeat(String label) {
         JButton seatButton = new JButton(label);
         seatButton.setPreferredSize(new Dimension(60, 40));
-        seatButton.setBackground(Color.WHITE);
+        seatButton.setBackground(seatPanelColor); // Warna dasar kursi adalah 7AE2CF
 
         seatButton.addActionListener(e -> {
-            if (seatButton.getBackground().equals(Color.WHITE)) {
-                seatButton.setBackground(new Color(0x285FF4));
+            if (seatButton.getBackground().equals(seatPanelColor)) {
+                seatButton.setBackground(darkBlue);
+                seatButton.setForeground(Color.WHITE);
                 selectedSeats.add(label);
-            } else if (seatButton.getBackground().equals(new Color(0x285FF4))) {
-                seatButton.setBackground(Color.WHITE);
+            } else if (seatButton.getBackground().equals(darkBlue)) {
+                seatButton.setBackground(seatPanelColor);
+                seatButton.setForeground(Color.BLACK);
                 selectedSeats.remove(label);
             }
         });
@@ -167,6 +183,7 @@ public class BusSeatSelection extends JFrame {
 
         passengerPanel = new JPanel();
         passengerPanel.setLayout(new BoxLayout(passengerPanel, BoxLayout.Y_AXIS));
+        passengerPanel.setBackground(beige); // Panel isi data menggunakan beige #ECDFBA
 
         List<JTextField> nameFields = new ArrayList<>();
         List<JTextField> nikFields = new ArrayList<>();
@@ -179,6 +196,7 @@ public class BusSeatSelection extends JFrame {
             JPanel singlePassengerPanel = new JPanel(null);
             singlePassengerPanel.setPreferredSize(new Dimension(240, 160));
             singlePassengerPanel.setBorder(BorderFactory.createTitledBorder("Seat " + seat));
+            singlePassengerPanel.setBackground(beige); // Setiap panel penumpang menggunakan beige #ECDFBA
 
             JLabel nameLabel = new JLabel("Nama Penumpang " + counter + ":");
             nameLabel.setBounds(10, 20, 140, 25);
@@ -213,6 +231,7 @@ public class BusSeatSelection extends JFrame {
         JButton orderAllButton = new JButton("Pesan Semua");
         orderAllButton.setMaximumSize(new Dimension(200, 30));
         orderAllButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        styleButton(orderAllButton);
 
         orderAllButton.addActionListener(ev -> {
             for (int i = 0; i < seatList.size(); i++) {
