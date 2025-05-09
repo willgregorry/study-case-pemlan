@@ -16,11 +16,15 @@ public class MainFrame extends JFrame {
     private JPanel mainPanel;
     private JButton backButton, nextButton, resetButton;
     private boolean isFillingForm = false;
-
+    private JLabel pricept;
+    private int price;
     private final Color darkBlue = new Color(0x27548A);
     private final Color seatPanelColor = new Color(0x7AE2CF); // Warna kursi diubah menjadi 7AE2CF
     private final Color beige = new Color(0xECDFBA);  // Warna beige yang diinginkan untuk panel
 
+    public void setPrice(int price) {
+        this.price = price;
+    }
 
     public MainFrame() {
         setTitle("Pilih Kursi Bus");
@@ -124,12 +128,14 @@ public class MainFrame extends JFrame {
 
         nextButton = new JButton("Lanjut");
         resetButton = new JButton("Reset");
+        pricept = new JLabel(String.valueOf(price));
         nextButton.setBounds(270, 680, 100, 30);
         resetButton.setBounds(380, 680, 100, 30);
         styleButton(nextButton);
         styleButton(resetButton);
         mainPanel.add(nextButton);
         mainPanel.add(resetButton);
+        mainPanel.add(pricept);
 
         nextButton.addActionListener(e -> {
             if (!isFillingForm && !selectedSeats.isEmpty()) {
@@ -267,7 +273,7 @@ public class MainFrame extends JFrame {
             isFillingForm = false;
         });
 
-        passengerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+      passengerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         passengerPanel.add(orderAllButton);
 
         passengerScrollPane = new JScrollPane(passengerPanel);
@@ -290,5 +296,12 @@ public class MainFrame extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(MainFrame::new);
     }
+    public MainFrame(boolean show) {
+        // semua UI setup
+        if (show) {
+            setVisible(true);
+        }
+    }
+
 
 }
