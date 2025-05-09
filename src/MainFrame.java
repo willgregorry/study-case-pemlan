@@ -287,4 +287,8 @@ public class MainFrame extends JFrame {
         isFillingForm = false;
     }
 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(MainFrame::new);
+    }
+
 }
