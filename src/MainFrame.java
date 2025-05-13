@@ -24,7 +24,7 @@ public class MainFrame extends JFrame {
     private JLabel pricept;
     private int price;
     private final Color darkBlue = new Color(0x27548A);
-    private final Color seatPanelColor = new Color(0x7AE2CF);
+    private final Color seatPanelColor = new Color(0x61A2CB);
     private final Color beige = new Color(0xECDFBA);
 
     public void setPrice(int price) {
@@ -161,6 +161,11 @@ public class MainFrame extends JFrame {
             if (!isFillingForm && !selectedSeats.isEmpty()) {
                 showPassengerForm();
                 isFillingForm = true;
+                for (JButton seat : allSeats){
+                    if(seat.isEnabled() && !selectedSeats.contains(seat.getText())){
+                        seat.setEnabled(false);
+                    }
+                }
                 backButton.setVisible(true);
                 nextButton.setVisible(false);
                 resetButton.setVisible(false);
