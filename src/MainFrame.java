@@ -148,7 +148,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(pricept);
 
         // Tambahkan tombol kembali (untuk menutup frame)
-        kembaliButton = new JButton("Main Page");
+        kembaliButton = new JButton("Halaman Sebelumnya");
         kembaliButton.setBounds(33, 715, 200, 30);
         styleButton(kembaliButton);
         mainPanel.add(kembaliButton);
