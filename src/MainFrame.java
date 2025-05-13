@@ -153,7 +153,8 @@ public class MainFrame extends JFrame {
         styleButton(kembaliButton);
         mainPanel.add(kembaliButton);
         kembaliButton.addActionListener(e -> {
-            dispose(); // menutup jendela
+            dispose(); // Tutup MainFrame
+            SwingUtilities.invokeLater(CityFrame::new); // Buka kembali CityFrame
         });
 
         nextButton.addActionListener(e -> {
