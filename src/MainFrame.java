@@ -1,7 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
+import java.util.HashMap;
 
 public class MainFrame extends JFrame {
     final Image ICON = new ImageIcon("assets/icon.png").getImage();
@@ -14,16 +19,17 @@ public class MainFrame extends JFrame {
     private JPanel passengerPanel;
     private JScrollPane passengerScrollPane;
     private JPanel mainPanel;
-    private JButton backButton, nextButton, resetButton;
+    private JButton backButton, nextButton, resetButton, kembaliButton;
     private boolean isFillingForm = false;
     private JLabel pricept;
     private int price;
     private final Color darkBlue = new Color(0x27548A);
-    private final Color seatPanelColor = new Color(0x7AE2CF); // Warna kursi diubah menjadi 7AE2CF
-    private final Color beige = new Color(0xECDFBA);  // Warna beige yang diinginkan untuk panel
+    private final Color seatPanelColor = new Color(0x7AE2CF);
+    private final Color beige = new Color(0xECDFBA);
 
     public void setPrice(int price) {
         this.price = price;
+        updatePriceLabel();
     }
 
     public MainFrame() {
@@ -35,7 +41,7 @@ public class MainFrame extends JFrame {
         setResizable(false);
 
         mainPanel = new JPanel(null);
-        mainPanel.setBackground(Color.WHITE); // Mengubah warna main panel menjadi putih
+        mainPanel.setBackground(Color.WHITE);
         setContentPane(mainPanel);
 
         backButton = new JButton("Kembali");
@@ -53,6 +59,7 @@ public class MainFrame extends JFrame {
                         seat.setForeground(Color.BLACK);
                     }
                 }
+                updatePriceLabel();
                 backButton.setVisible(false);
                 nextButton.setVisible(true);
                 resetButton.setVisible(true);
@@ -61,7 +68,7 @@ public class MainFrame extends JFrame {
         });
 
         JPanel seatPanel = new JPanel(new GridBagLayout());
-        seatPanel.setBackground(beige); // Panel kursi menggunakan warna beige
+        seatPanel.setBackground(beige);
         JScrollPane seatScrollPane = new JScrollPane(seatPanel);
         seatScrollPane.setBounds(270, 50, 500, 620);
         mainPanel.add(seatScrollPane);
@@ -128,14 +135,26 @@ public class MainFrame extends JFrame {
 
         nextButton = new JButton("Lanjut");
         resetButton = new JButton("Reset");
-        pricept = new JLabel(String.valueOf(price));
+        pricept = new JLabel("Rp0");
         nextButton.setBounds(270, 680, 100, 30);
         resetButton.setBounds(380, 680, 100, 30);
+        pricept.setBounds(500, 680, 200, 30);
+        pricept.setFont(new Font("SansSerif", Font.BOLD, 16));
+        pricept.setForeground(darkBlue);
         styleButton(nextButton);
         styleButton(resetButton);
         mainPanel.add(nextButton);
         mainPanel.add(resetButton);
         mainPanel.add(pricept);
+
+        // Tambahkan tombol kembali (untuk menutup frame)
+        kembaliButton = new JButton("Keluar");
+        kembaliButton.setBounds(20, 680, 100, 30);
+        styleButton(kembaliButton);
+        mainPanel.add(kembaliButton);
+        kembaliButton.addActionListener(e -> {
+            dispose(); // menutup jendela
+        });
 
         nextButton.addActionListener(e -> {
             if (!isFillingForm && !selectedSeats.isEmpty()) {
@@ -155,6 +174,7 @@ public class MainFrame extends JFrame {
             }
             selectedSeats.clear();
             removePassengerPanel();
+            updatePriceLabel();
         });
 
         setVisible(true);
@@ -166,10 +186,14 @@ public class MainFrame extends JFrame {
         button.setFocusPainted(false);
     }
 
+    private void updatePriceLabel() {
+        pricept.setText("Rp" + (price * selectedSeats.size()));
+    }
+
     private JButton createSeat(String label) {
         JButton seatButton = new JButton(label);
         seatButton.setPreferredSize(new Dimension(60, 40));
-        seatButton.setBackground(seatPanelColor); // Warna dasar kursi adalah 7AE2CF
+        seatButton.setBackground(seatPanelColor);
 
         seatButton.addActionListener(e -> {
             if (seatButton.getBackground().equals(seatPanelColor)) {
@@ -181,6 +205,7 @@ public class MainFrame extends JFrame {
                 seatButton.setForeground(Color.BLACK);
                 selectedSeats.remove(label);
             }
+            updatePriceLabel();
         });
 
         allSeats.add(seatButton);
@@ -193,7 +218,7 @@ public class MainFrame extends JFrame {
 
         passengerPanel = new JPanel();
         passengerPanel.setLayout(new BoxLayout(passengerPanel, BoxLayout.Y_AXIS));
-        passengerPanel.setBackground(beige); // Panel isi data menggunakan beige #ECDFBA
+        passengerPanel.setBackground(beige);
 
         List<JTextField> nameFields = new ArrayList<>();
         List<JTextField> nikFields = new ArrayList<>();
@@ -206,7 +231,7 @@ public class MainFrame extends JFrame {
             JPanel singlePassengerPanel = new JPanel(null);
             singlePassengerPanel.setPreferredSize(new Dimension(240, 160));
             singlePassengerPanel.setBorder(BorderFactory.createTitledBorder("Seat " + seat));
-            singlePassengerPanel.setBackground(beige); // Setiap panel penumpang menggunakan beige #ECDFBA
+            singlePassengerPanel.setBackground(beige);
 
             JLabel nameLabel = new JLabel("Nama Penumpang " + counter + ":");
             nameLabel.setBounds(10, 20, 140, 25);
@@ -253,10 +278,17 @@ public class MainFrame extends JFrame {
                     JOptionPane.showMessageDialog(this, "Data penumpang untuk kursi " + seatList.get(i) + " belum lengkap!");
                     return;
                 }
+                if (nik.length() != 16 || !nik.matches("\\d+")) {
+                    JOptionPane.showMessageDialog(this, "NIK harus 16 digit angka untuk kursi " + seatList.get(i));
+                    return;
+                }
+                if (!phone.matches("\\d{10,13}")) {
+                    JOptionPane.showMessageDialog(this, "No. Telp tidak valid untuk kursi " + seatList.get(i));
+                    return;
+                }
             }
 
-            for (int i = 0; i < seatList.size(); i++) {
-                String seat = seatList.get(i);
+            for (String seat : seatList) {
                 JButton seatButton = seatButtonMap.get(seat);
                 if (seatButton != null) {
                     seatButton.setBackground(Color.GRAY);
@@ -271,9 +303,10 @@ public class MainFrame extends JFrame {
             nextButton.setVisible(true);
             resetButton.setVisible(true);
             isFillingForm = false;
+            updatePriceLabel();
         });
 
-      passengerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        passengerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         passengerPanel.add(orderAllButton);
 
         passengerScrollPane = new JScrollPane(passengerPanel);
@@ -294,14 +327,9 @@ public class MainFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(MainFrame::new);
+        SwingUtilities.invokeLater(() -> {
+            MainFrame frame = new MainFrame();
+            frame.setPrice(50000); // Set harga tiket per kursi
+        });
     }
-    public MainFrame(boolean show) {
-        // semua UI setup
-        if (show) {
-            setVisible(true);
-        }
-    }
-
-
 }
