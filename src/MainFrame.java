@@ -310,6 +310,14 @@ public class MainFrame extends JFrame {
             resetButton.setVisible(true);
             isFillingForm = false;
             updatePriceLabel();
+
+            for (JButton seat : allSeats) {
+                if(!seat.getBackground().equals(Color.GRAY)) {
+                    seat.setEnabled(true);
+                    seat.setBackground(seatPanelColor);
+                    seat.setForeground(Color.BLACK);
+                }
+            }
         });
 
         passengerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
