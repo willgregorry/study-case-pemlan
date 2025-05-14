@@ -64,7 +64,6 @@ public class FileManager {
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
             writer.write(data);
-            writer.newLine();
             writer.close();
 
             System.out.println("Successfully wrote data to file");

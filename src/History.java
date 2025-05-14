@@ -26,7 +26,7 @@ public class History extends JFrame {
         setSize(800, 600);
         setIconImage(ICON);
         setLocationRelativeTo(null);
-        setResizable(true);
+        setResizable(false);
     }
 
     private void setupComponents() {
@@ -44,7 +44,7 @@ public class History extends JFrame {
         headerPanel.add(titleLabel, BorderLayout.WEST);
 
         // Table setup
-        String[] columnNames = {"No. Kursi", "Nama Penumpang", "NIK", "No. Telepon", "Keberangkatan", "Tujuan"};
+        String[] columnNames = {"No. Kursi", "Nama Penumpang", "NIK", "No. Telepon", "Keberangkatan", "Tujuan", "Harga"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -64,6 +64,7 @@ public class History extends JFrame {
         bookingTable.getColumnModel().getColumn(3).setPreferredWidth(120);   // Phone
         bookingTable.getColumnModel().getColumn(4).setPreferredWidth(100);   // Departure
         bookingTable.getColumnModel().getColumn(5).setPreferredWidth(100);   // Arrival
+        bookingTable.getColumnModel().getColumn(6).setPreferredWidth(100);   // Fare
 
         JScrollPane scrollPane = new JScrollPane(bookingTable);
         scrollPane.setBorder(BorderFactory.createLineBorder(darkBlue));
@@ -121,8 +122,9 @@ public class History extends JFrame {
                     String phone = parts[3].trim();
                     String departure = parts[4].trim();
                     String arrival = parts[5].trim();
+                    String price = String.format("Rp%,.2f", Double.parseDouble(parts[6].trim()));
 
-                    tableModel.addRow(new Object[]{seatNumber, name, nik, phone, departure, arrival});
+                    tableModel.addRow(new Object[]{seatNumber, name, nik, phone, departure, arrival, price});
                 }
             }
 

@@ -318,14 +318,14 @@ public class MainFrame extends JFrame {
                     JOptionPane.showMessageDialog(this, "Data penumpang untuk kursi " + seatList.get(i) + " belum lengkap!");
                     return;
                 }
-                if (nik.length() != 16 || !nik.matches("\\d+")) {
-                    JOptionPane.showMessageDialog(this, "NIK harus 16 digit angka untuk kursi " + seatList.get(i));
-                    return;
-                }
-                if (!phone.matches("\\d{10,13}")) {
-                    JOptionPane.showMessageDialog(this, "No. Telp tidak valid untuk kursi " + seatList.get(i));
-                    return;
-                }
+//                if (nik.length() != 16 || !nik.matches("\\d+")) {
+//                    JOptionPane.showMessageDialog(this, "NIK harus 16 digit angka untuk kursi " + seatList.get(i));
+//                    return;
+//                }
+//                if (!phone.matches("\\d{10,13}")) {
+//                    JOptionPane.showMessageDialog(this, "No. Telp tidak valid untuk kursi " + seatList.get(i));
+//                    return;
+//                }
             }
 
             StringBuilder sb = new StringBuilder();
@@ -341,7 +341,9 @@ public class MainFrame extends JFrame {
                         .append(" , ").append(nik)
                         .append(" , ").append(phone)
                         .append(" , ").append(departure)
-                        .append(" , ").append(arrival);
+                        .append(" , ").append(arrival)
+                        .append(" , ").append(price)
+                        .append("\n");
             }
 
             fileManager.writeDataToFile(sb.toString(), "data_penumpang.txt");
