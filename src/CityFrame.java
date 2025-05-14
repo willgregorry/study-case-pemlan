@@ -8,13 +8,20 @@ public class CityFrame extends JFrame {
     private final Color seatPanelColor = new Color(0x61A2CB);
     private final Color beige = new Color(0xECDFBA);
 
+    public int harga;
+    final int PANEL_WIDTH = 500;
+    final int PANEL_HEIGHT = 500;
+    Image asu;
+    Timer timer;
+    int xVelocity = 1;
+    int yVelocity = 1;
+    int x = 0;
+    int y = 0;
 
 
     public CityFrame() {
         departureArrival();
     }
-
-
 
     private void departureArrival() {
         setTitle("Departure Arrival");
@@ -23,6 +30,14 @@ public class CityFrame extends JFrame {
         setIconImage(ICON);
         setLocationRelativeTo(null);
         setResizable(false);
+
+        this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+        asu = new ImageIcon("assets/icon.png").getImage();
+        int imageWidth = asu.getWidth(null);
+
+        // Atur posisi awal di atas tengah
+        x = (PANEL_WIDTH - imageWidth) / 2 + 50;
+        y = 0; // atau bisa digeser sedikit ke bawah
 
         String[] cities = {
                 "MAGELANG", "JOGJA", "KARTOSURO", "SOLO",
@@ -117,6 +132,12 @@ public class CityFrame extends JFrame {
         button.setBackground(darkBlue);
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
+    }
+
+    public void paint(Graphics g){
+        super.paint(g);
+        Graphics2D g2D = (Graphics2D) g;
+        g2D.drawImage(asu, x, y, null);
     }
 
 }
