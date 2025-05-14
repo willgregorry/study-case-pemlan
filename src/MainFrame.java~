@@ -342,7 +342,7 @@ public class MainFrame extends JFrame {
                         .append(" , ").append(phone)
                         .append(" , ").append(departure)
                         .append(" , ").append(arrival)
-                        .append(" , ").append(String.format("Rp%,.2f", (price * selectedSeats.size())))
+                        .append(" , ").append(price)
                         .append("\n");
             }
 
