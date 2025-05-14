@@ -24,7 +24,7 @@ public class MainFrame extends JFrame {
     private JButton backButton, nextButton, resetButton, kembaliButton, historyButton;
     private boolean isFillingForm = false;
     private JLabel pricept;
-    private int price;
+    private double price;
     private FileManager fileManager = new FileManager();
     private final Color darkBlue = new Color(0x27548A);
     private final Color seatPanelColor = new Color(0x61A2CB);
@@ -227,7 +227,7 @@ public class MainFrame extends JFrame {
     }
 
     private void updatePriceLabel() {
-        pricept.setText("Rp" + (price * selectedSeats.size()));
+        pricept.setText(String.format("Rp%,.2f", (price * selectedSeats.size())));
     }
 
     private JButton createSeat(String label) {
@@ -393,7 +393,7 @@ public class MainFrame extends JFrame {
         isFillingForm = false;
     }
 
-    public MainFrame(int price, String departure, String arrival) {
+    public MainFrame(double price, String departure, String arrival) {
         this(); // Panggil constructor default
         this.price = price;
         this.departure = departure;

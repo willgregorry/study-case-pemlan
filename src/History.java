@@ -11,6 +11,7 @@ public class History extends JFrame {
     private final FileManager fileManager = new FileManager();
     private JTable bookingTable;
     private DefaultTableModel tableModel;
+    private double harga;
 
     public History() {
         initializeFrame();

@@ -79,7 +79,6 @@ public class History extends JFrame {
         styleButton(backButton);
         backButton.addActionListener(e -> {
             dispose(); // Close this frame
-            SwingUtilities.invokeLater(MainFrame::new); // Open MainFrame
         });
 
         buttonPanel.add(refreshButton);

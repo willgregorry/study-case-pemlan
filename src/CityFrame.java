@@ -11,8 +11,7 @@ public class CityFrame extends JFrame {
     public int harga;
     final int PANEL_WIDTH = 500;
     final int PANEL_HEIGHT = 500;
-    Image asu;
-    Timer timer;
+    Image logo, bgKota;
     int xVelocity = 1;
     int yVelocity = 1;
     int x = 0;
@@ -32,8 +31,9 @@ public class CityFrame extends JFrame {
         setResizable(false);
 
         this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-        asu = new ImageIcon("assets/icon.png").getImage();
-        int imageWidth = asu.getWidth(null);
+        logo = new ImageIcon("assets/icon.png").getImage();
+        bgKota = new ImageIcon("assets/kota.png").getImage();
+        int imageWidth = logo.getWidth(null);
 
         // Atur posisi awal di atas tengah
         x = (PANEL_WIDTH - imageWidth) / 2 + 50;
@@ -44,7 +44,7 @@ public class CityFrame extends JFrame {
                 "GENDINGAN", "NGAWI", "WILANGAN"
         };
 
-        int[][] fares = {
+        double[][] fares = {
                 { 0, 15000, 30000, 30000, 55000, 60000, 85000 },
                 { 0, 0, 15000, 15000, 40000, 45000, 70000 },
                 { 0, 0, 0, 15000, 35000, 40000, 60000 },
@@ -96,7 +96,7 @@ public class CityFrame extends JFrame {
                 return;
             }
 
-            int harga = fares[Math.min(i, j)][Math.max(i, j)];
+            double harga = fares[Math.min(i, j)][Math.max(i, j)];
 
             // Kirim harga ke MainFrame melalui constructor yang benar
             MainFrame mainFrame = new MainFrame(harga, departure, arrival); // <-- INI YANG BENAR
@@ -137,7 +137,9 @@ public class CityFrame extends JFrame {
     public void paint(Graphics g){
         super.paint(g);
         Graphics2D g2D = (Graphics2D) g;
-        g2D.drawImage(asu, x, y, null);
+        int bgHeight = bgKota.getHeight(null);
+        int bgY = getHeight() - bgHeight;
+        g2D.drawImage(logo, x, y, null);
+        g2D.drawImage(bgKota, 0, bgY, null);
     }
-
 }
