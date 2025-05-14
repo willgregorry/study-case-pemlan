@@ -1,0 +1,17 @@
+import javax.swing.*;
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) {
+        //
+//        SwingUtilities.invokeLater(CityFrame::new);
+
+        FileManager file = new FileManager();
+        file.writeDataToFile("ticket_data.txt", "Fayas");
+        String[] readData = file.readDataFromFile("ticket_data.txt");
+        for (String data : readData) {
+            if (data == null) continue;
+            System.out.println(data);
+        }
+    }
+}

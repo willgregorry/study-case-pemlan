@@ -4,6 +4,7 @@ import java.awt.*;
 public class CityFrame extends JFrame {
     private final Color beige = new Color(0xECDFBA);  // Warna beige
     public int harga;
+    private String departure, arrival;
 
     public CityFrame() {
         departureArrival();
@@ -60,8 +61,8 @@ public class CityFrame extends JFrame {
         setVisible(true);
 
         submitButton.addActionListener(e -> {
-            String departure = (String) dptCombo.getSelectedItem();
-            String arrival = (String) arrCombo.getSelectedItem();
+            this.departure = (String) dptCombo.getSelectedItem();
+            this.arrival = (String) arrCombo.getSelectedItem();
 
             int i = indexOfCity(departure);
             int j = indexOfCity(arrival);
@@ -91,7 +92,4 @@ public class CityFrame extends JFrame {
         };
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(CityFrame::new);
-    }
 }

@@ -400,11 +400,8 @@ public class MainFrame extends JFrame {
 
         updatePriceLabel();
 
-        // Make sure the GUI is fully rendered before loading seats
-        SwingUtilities.invokeLater(() -> {
-            // Load booked seats from file
-            loadBookedSeats();
-        });
+        // Load booked seats from file
+        loadBookedSeats();
     }
 
     // Add method to load booked seats
@@ -414,7 +411,6 @@ public class MainFrame extends JFrame {
             File dataDir = new File("datas");
             if (!dataDir.exists()) {
                 dataDir.mkdirs();
-                System.out.println("Created data directory: " + dataDir.getAbsolutePath());
             }
 
             // Check if data file exists
@@ -422,26 +418,16 @@ public class MainFrame extends JFrame {
             if (!dataFile.exists()) {
                 // Create the file if it doesn't exist
                 dataFile.createNewFile();
-                System.out.println("Created new data file: " + dataFile.getAbsolutePath());
                 return; // No data to load yet
             }
 
-            System.out.println("Loading booked seats from: " + dataFile.getAbsolutePath());
-
             // Read booked seats data
-            String[] bookedSeatsData = fileManager.readDataFromFile("data_penumpang.txt");
+            String[] bookedSeatsData = FileManager.readDataFromFile("datas/data_penumpang.txt");
 
-            if (bookedSeatsData == null || bookedSeatsData.length == 0) {
-                System.out.println("No booked seats data found");
-                return;
-            }
-
-            System.out.println("Found " + bookedSeatsData.length + " booking records");
+            if (bookedSeatsData == null) return;
 
             for (String bookingData : bookedSeatsData) {
-                if (bookingData == null || bookingData.trim().isEmpty()) continue;
-
-                System.out.println("Processing booking data: " + bookingData);
+                if (bookingData == null) continue;
 
                 // Parse booking data (format: Seat , Name , NIK , Phone , Departure , Arrival)
                 String[] parts = bookingData.split(" , ");
@@ -451,22 +437,13 @@ public class MainFrame extends JFrame {
                     String bookedDeparture = parts[4].trim();
                     String bookedArrival = parts[5].trim();
 
-                    System.out.println("Seat: " + seatNumber +
-                            ", Departure: " + bookedDeparture +
-                            ", Arrival: " + bookedArrival);
-                    System.out.println("Current route: " + departure + " - " + arrival);
-
                     // Check if this booking matches the current route
                     if (bookedDeparture.equals(departure) && bookedArrival.equals(arrival)) {
                         // Mark seat as booked
                         JButton seatButton = seatButtonMap.get(seatNumber);
                         if (seatButton != null) {
-                            System.out.println("Marking seat " + seatNumber + " as booked");
                             seatButton.setBackground(Color.GRAY);
                             seatButton.setEnabled(false);
-                            seatButton.setForeground(Color.WHITE);
-                        } else {
-                            System.out.println("Could not find button for seat " + seatNumber);
                         }
                     }
                 }
