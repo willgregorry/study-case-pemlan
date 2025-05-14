@@ -21,7 +21,7 @@ public class MainFrame extends JFrame {
     private JPanel passengerPanel;
     private JScrollPane passengerScrollPane;
     private JPanel mainPanel;
-    private JButton backButton, nextButton, resetButton, kembaliButton;
+    private JButton backButton, nextButton, resetButton, kembaliButton, historyButton;
     private boolean isFillingForm = false;
     private JLabel pricept;
     private int price;
@@ -29,6 +29,8 @@ public class MainFrame extends JFrame {
     private final Color darkBlue = new Color(0x27548A);
     private final Color seatPanelColor = new Color(0x61A2CB);
     private final Color beige = new Color(0xECDFBA);
+    private final Color seatReservedColor = new Color(0x808080); // Gray for reserved
+    private final Color seatOverlapColor = new Color(0xFF6B6B);  // Red for overlapping routes
 
     public void setPrice(int price) {
         this.price = price;
@@ -66,7 +68,8 @@ public class MainFrame extends JFrame {
                 isFillingForm = false;
 
                 for (JButton seat : allSeats) {
-                    if(!seat.getBackground().equals(Color.GRAY)) {
+                    if(!seat.getBackground().equals(seatReservedColor) &&
+                            !seat.getBackground().equals(seatOverlapColor)) {
                         seat.setEnabled(true);
 
                         if(selectedSeats.contains(seat.getText())) {
@@ -176,6 +179,14 @@ public class MainFrame extends JFrame {
             SwingUtilities.invokeLater(CityFrame::new); // Buka kembali CityFrame
         });
 
+        historyButton = new JButton("Riwayat Pemesanan");
+        historyButton.setBounds(570, 715, 200, 30);
+        styleButton(historyButton);
+        mainPanel.add(historyButton);
+        historyButton.addActionListener(e -> {
+            SwingUtilities.invokeLater(History::new);
+        });
+
         nextButton.addActionListener(e -> {
             if (!isFillingForm && !selectedSeats.isEmpty()) {
                 showPassengerForm();
@@ -193,8 +204,9 @@ public class MainFrame extends JFrame {
 
         resetButton.addActionListener(e -> {
             for (JButton seat : allSeats) {
-                // Only reset seats that are not already booked (gray)
-                if (!seat.getBackground().equals(Color.GRAY)) {
+                // Only reset seats that are not already booked (gray) or overlapping routes (red)
+                if (!seat.getBackground().equals(seatReservedColor) &&
+                        !seat.getBackground().equals(seatOverlapColor)) {
                     seat.setBackground(seatPanelColor);
                     seat.setEnabled(true);
                     seat.setForeground(Color.BLACK);
@@ -306,14 +318,14 @@ public class MainFrame extends JFrame {
                     JOptionPane.showMessageDialog(this, "Data penumpang untuk kursi " + seatList.get(i) + " belum lengkap!");
                     return;
                 }
-//                if (nik.length() != 16 || !nik.matches("\\d+")) {
-//                    JOptionPane.showMessageDialog(this, "NIK harus 16 digit angka untuk kursi " + seatList.get(i));
-//                    return;
-//                }
-//                if (!phone.matches("\\d{10,13}")) {
-//                    JOptionPane.showMessageDialog(this, "No. Telp tidak valid untuk kursi " + seatList.get(i));
-//                    return;
-//                }
+                if (nik.length() != 16 || !nik.matches("\\d+")) {
+                    JOptionPane.showMessageDialog(this, "NIK harus 16 digit angka untuk kursi " + seatList.get(i));
+                    return;
+                }
+                if (!phone.matches("\\d{10,13}")) {
+                    JOptionPane.showMessageDialog(this, "No. Telp tidak valid untuk kursi " + seatList.get(i));
+                    return;
+                }
             }
 
             StringBuilder sb = new StringBuilder();
@@ -337,7 +349,7 @@ public class MainFrame extends JFrame {
             for (String seat : seatList) {
                 JButton seatButton = seatButtonMap.get(seat);
                 if (seatButton != null) {
-                    seatButton.setBackground(Color.GRAY);
+                    seatButton.setBackground(seatReservedColor);
                     seatButton.setEnabled(false);
                 }
             }
@@ -351,10 +363,9 @@ public class MainFrame extends JFrame {
             isFillingForm = false;
             updatePriceLabel();
 
-
-
             for (JButton seat : allSeats) {
-                if(!seat.getBackground().equals(Color.GRAY)) {
+                if(!seat.getBackground().equals(seatReservedColor) &&
+                        !seat.getBackground().equals(seatOverlapColor)) {
                     seat.setEnabled(true);
                     seat.setBackground(seatPanelColor);
                     seat.setForeground(Color.BLACK);
@@ -438,39 +449,57 @@ public class MainFrame extends JFrame {
 
             System.out.println("Found " + bookedSeatsData.length + " booking records");
 
+            // First pass: Find directly booked seats for this route
             for (String bookingData : bookedSeatsData) {
                 if (bookingData == null || bookingData.trim().isEmpty()) continue;
 
-                System.out.println("Processing booking data: " + bookingData);
-
-                // Parse booking data (format: Seat , Name , NIK , Phone , Departure , Arrival)
                 String[] parts = bookingData.split(" , ");
-
                 if (parts.length >= 6) {
                     String seatNumber = parts[0].trim();
                     String bookedDeparture = parts[4].trim();
                     String bookedArrival = parts[5].trim();
 
-                    System.out.println("Seat: " + seatNumber +
-                            ", Departure: " + bookedDeparture +
-                            ", Arrival: " + bookedArrival);
-                    System.out.println("Current route: " + departure + " - " + arrival);
-
-                    // Check if this booking matches the current route
+                    // Check if this booking exactly matches the current route
                     if (bookedDeparture.equals(departure) && bookedArrival.equals(arrival)) {
                         // Mark seat as booked
                         JButton seatButton = seatButtonMap.get(seatNumber);
                         if (seatButton != null) {
-                            System.out.println("Marking seat " + seatNumber + " as booked");
-                            seatButton.setBackground(Color.GRAY);
+                            System.out.println("Marking seat " + seatNumber + " as booked for exact match");
+                            seatButton.setBackground(seatReservedColor);
                             seatButton.setEnabled(false);
                             seatButton.setForeground(Color.WHITE);
-                        } else {
-                            System.out.println("Could not find button for seat " + seatNumber);
                         }
                     }
                 }
             }
+
+            // Second pass: Check for overlapping routes
+            for (JButton seat : allSeats) {
+                String seatNumber = seat.getText();
+
+                // Skip seats that are already marked as booked for this route
+                if (seat.getBackground().equals(seatReservedColor)) {
+                    continue;
+                }
+
+                // Get all bookings for this seat
+                List<FileManager.Booking> seatBookings = fileManager.getBookingsForSeat(seatNumber);
+
+                // Check if any booking overlaps with current route
+                for (FileManager.Booking booking : seatBookings) {
+                    // Check if routes overlap
+                    if (fileManager.routesOverlap(departure, arrival,
+                            booking.departure, booking.arrival)) {
+                        System.out.println("Marking seat " + seatNumber + " as unavailable due to overlapping route: " +
+                                booking.departure + " to " + booking.arrival);
+                        seat.setBackground(seatOverlapColor);
+                        seat.setEnabled(false);
+                        seat.setForeground(Color.WHITE);
+                        break;
+                    }
+                }
+            }
+
         } catch (Exception e) {
             System.out.println("Error loading booked seats: " + e.getMessage());
             e.printStackTrace();
