@@ -11,6 +11,7 @@ import java.io.File;
 
 public class MainFrame extends JFrame {
     final Image ICON = new ImageIcon("assets/icon.png").getImage();
+    final Image BACKGROUND = new ImageIcon("assets/bg2 .png").getImage(); // Added background image
     final int SCREEN_WIDTH = 800;
     final int SCREEN_HEIGHT = 800;
 
@@ -20,7 +21,7 @@ public class MainFrame extends JFrame {
     private final Map<String, JButton> seatButtonMap = new HashMap<>();
     private JPanel passengerPanel;
     private JScrollPane passengerScrollPane;
-    private JPanel mainPanel;
+    private BackgroundPanel mainPanel; // Changed to BackgroundPanel
     private JButton backButton, nextButton, resetButton, kembaliButton, historyButton;
     private boolean isFillingForm = false;
     private JLabel pricept;
@@ -31,6 +32,25 @@ public class MainFrame extends JFrame {
     private final Color beige = new Color(0xECDFBA);
     private final Color seatReservedColor = new Color(0x808080); // Gray for reserved
     private final Color seatOverlapColor = new Color(0xFF6B6B);  // Red for overlapping routes
+
+    // Custom JPanel with background image
+    class BackgroundPanel extends JPanel {
+        private Image backgroundImage;
+
+        public BackgroundPanel(Image backgroundImage) {
+            this.backgroundImage = backgroundImage;
+            setLayout(null);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (backgroundImage != null) {
+                // Draw the background image to fill the panel
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        }
+    }
 
     public void setPrice(int price) {
         this.price = price;
@@ -45,14 +65,18 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        mainPanel = new JPanel(null);
-        mainPanel.setBackground(Color.WHITE);
+        // Create background panel instead of plain JPanel
+        mainPanel = new BackgroundPanel(BACKGROUND);
         setContentPane(mainPanel);
 
         JLabel labelKota = new JLabel();
         labelKota.setText(departure + " - " + arrival);
         labelKota.setBounds(270, -2, 400, 50);
         labelKota.setFont(new Font("SansSerif", Font.BOLD, 25));
+        // Make label text readable against any background
+        labelKota.setForeground(Color.BLACK);
+        // Optional: add a subtle background to the label for better readability
+        labelKota.setOpaque(false);
         mainPanel.add(labelKota);
 
         backButton = new JButton("Kembali");
@@ -163,6 +187,9 @@ public class MainFrame extends JFrame {
         pricept.setBounds(500, 680, 200, 30);
         pricept.setFont(new Font("SansSerif", Font.BOLD, 16));
         pricept.setForeground(darkBlue);
+        // Optional: enhance price label readability against background
+        pricept.setOpaque(true);
+        pricept.setBackground(new Color(255, 255, 255, 180)); // Semi-transparent white
         styleButton(nextButton);
         styleButton(resetButton);
         mainPanel.add(nextButton);
