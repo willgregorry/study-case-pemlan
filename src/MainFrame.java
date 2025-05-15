@@ -11,7 +11,7 @@ import java.io.File;
 
 public class MainFrame extends JFrame {
     final Image ICON = new ImageIcon("assets/icon.png").getImage();
-    final Image BACKGROUND = new ImageIcon("assets/bg2.jpg").getImage(); // Added background image
+    final Image BACKGROUND = new ImageIcon("assets/bg2.jpg").getImage();
     final int SCREEN_WIDTH = 800;
     final int SCREEN_HEIGHT = 800;
 
@@ -187,9 +187,8 @@ public class MainFrame extends JFrame {
         pricept.setBounds(500, 680, 200, 30);
         pricept.setFont(new Font("SansSerif", Font.BOLD, 16));
         pricept.setForeground(darkBlue);
-        // Optional: enhance price label readability against background
         pricept.setOpaque(true);
-        pricept.setBackground(new Color(255, 255, 255, 255)); // Semi-transparent white
+        pricept.setBackground(new Color(255, 255, 255, 255));
         styleButton(nextButton);
         styleButton(resetButton);
         mainPanel.add(nextButton);
@@ -363,14 +362,14 @@ public class MainFrame extends JFrame {
                 String nik = nikFields.get(i).getText().trim();
                 String phone = phoneFields.get(i).getText().trim();
 
-                sb.append("").append(seat)
-                        .append(" , ").append(name)
-                        .append(" , ").append(nik)
-                        .append(" , ").append(phone)
-                        .append(" , ").append(departure)
-                        .append(" , ").append(arrival)
-                        .append(" , ").append(price)
-                        .append("\n");
+                sb.append(seat)
+                    .append(" , ").append(name)
+                    .append(" , ").append(nik)
+                    .append(" , ").append(phone)
+                    .append(" , ").append(departure)
+                    .append(" , ").append(arrival)
+                    .append(" , ").append(price)
+                    .append("\n");
             }
 
             fileManager.writeDataToFile(sb.toString(), "data_penumpang.txt");
