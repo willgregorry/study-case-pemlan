@@ -11,7 +11,7 @@ import java.io.File;
 
 public class MainFrame extends JFrame {
     final Image ICON = new ImageIcon("assets/icon.png").getImage();
-    final Image BACKGROUND = new ImageIcon("assets/bg2.png").getImage(); // Added background image
+    final Image BACKGROUND = new ImageIcon("assets/bg2.jpg").getImage(); // Added background image
     final int SCREEN_WIDTH = 800;
     final int SCREEN_HEIGHT = 800;
 
@@ -189,7 +189,7 @@ public class MainFrame extends JFrame {
         pricept.setForeground(darkBlue);
         // Optional: enhance price label readability against background
         pricept.setOpaque(true);
-        pricept.setBackground(new Color(255, 255, 255, 180)); // Semi-transparent white
+        pricept.setBackground(new Color(255, 255, 255, 255)); // Semi-transparent white
         styleButton(nextButton);
         styleButton(resetButton);
         mainPanel.add(nextButton);
