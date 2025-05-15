@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -26,7 +25,7 @@ public class MainFrame extends JFrame {
     private boolean isFillingForm = false;
     private JLabel pricept;
     private double price;
-    private FileManager fileManager = new FileManager();
+    private Passenger passenger = new Passenger();
     private final Color darkBlue = new Color(0x27548A);
     private final Color seatPanelColor = new Color(0x61A2CB);
     private final Color beige = new Color(0xECDFBA);
@@ -202,7 +201,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(kembaliButton);
         kembaliButton.addActionListener(e -> {
             dispose(); // Tutup MainFrame
-            SwingUtilities.invokeLater(CityFrame::new); // Buka kembali CityFrame
+            SwingUtilities.invokeLater(Trayek::new); // Buka kembali CityFrame
         });
 
         historyButton = new JButton("Riwayat Pemesanan");
@@ -372,7 +371,7 @@ public class MainFrame extends JFrame {
                     .append("\n");
             }
 
-            fileManager.writeDataToFile(sb.toString(), "data_penumpang.txt");
+            passenger.writeDataToFile(sb.toString(), "data_penumpang.txt");
 
             for (String seat : seatList) {
                 JButton seatButton = seatButtonMap.get(seat);
@@ -468,7 +467,7 @@ public class MainFrame extends JFrame {
             System.out.println("Loading booked seats from: " + dataFile.getAbsolutePath());
 
             // Read booked seats data
-            String[] bookedSeatsData = fileManager.readDataFromFile("data_penumpang.txt");
+            String[] bookedSeatsData = passenger.readDataFromFile("data_penumpang.txt");
 
             if (bookedSeatsData == null || bookedSeatsData.length == 0) {
                 System.out.println("No booked seats data found");
@@ -511,12 +510,12 @@ public class MainFrame extends JFrame {
                 }
 
                 // Get all bookings for this seat
-                List<FileManager.Booking> seatBookings = fileManager.getBookingsForSeat(seatNumber);
+                List<Passenger.Booking> seatBookings = passenger.getBookingsForSeat(seatNumber);
 
                 // Check if any booking overlaps with current route
-                for (FileManager.Booking booking : seatBookings) {
+                for (Passenger.Booking booking : seatBookings) {
                     // Check if routes overlap
-                    if (fileManager.routesOverlap(departure, arrival,
+                    if (passenger.routesOverlap(departure, arrival,
                             booking.departure, booking.arrival)) {
                         System.out.println("Marking seat " + seatNumber + " as unavailable due to overlapping route: " +
                                 booking.departure + " to " + booking.arrival);

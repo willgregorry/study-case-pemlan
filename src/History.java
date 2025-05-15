@@ -1,14 +1,12 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.io.File;
 
 public class History extends JFrame {
     private final Image ICON = new ImageIcon("assets/icon.png").getImage();
     private final Color darkBlue = new Color(0x27548A);
     private final Color beige = new Color(0xECDFBA);
-    private final FileManager fileManager = new FileManager();
+    private final Passenger passenger = new Passenger();
     private JTable bookingTable;
     private DefaultTableModel tableModel;
     private double harga;
@@ -101,7 +99,7 @@ public class History extends JFrame {
 
         try {
             // Read booking data from file
-            String[] bookingData = fileManager.readDataFromFile("data_penumpang.txt");
+            String[] bookingData = passenger.readDataFromFile("data_penumpang.txt");
 
             if (bookingData == null || bookingData.length == 0) {
                 System.out.println("No booking data found");
